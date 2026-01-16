@@ -1,0 +1,7 @@
+<Page>
+  <ActionBar title="Dummy Page" />
+  <StackLayout>
+    <Label text="Dummy Page" class="h1" />
+    <Button text="Go Back" tap="goBack" />
+  </StackLayout>
+</Page>
