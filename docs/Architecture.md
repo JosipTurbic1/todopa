@@ -46,3 +46,7 @@ Alle Änderungen werden lokal gespeichert. Zusätzlich wird eine Synchronisation
 - Wartbarkeit durch klare Schichten
 - Testbarkeit (Services und Repositories separat testbar)
 - Erweiterbarkeit (spätere Backend-Synchronisation)
+
+Die Geschäftslogik wird im TaskService gekapselt und über ein TaskRepository persistiert.
+
+Die Instanziierung der Services erfolgt im Composition Root (app/app.ts / app/app.container.ts)
