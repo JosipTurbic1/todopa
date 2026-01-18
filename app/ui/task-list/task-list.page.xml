@@ -1,5 +1,8 @@
 <Page navigatingTo="onNavigatingTo">
-  <ActionBar title="Aufgaben" />
+  <ActionBar title="Aufgaben">
+    <ActionItem text="+" tap="goToCreate" ios.position="right" android.position="actionBar" />
+  </ActionBar>
+
   <StackLayout>
 
     <StackLayout orientation="horizontal" margin="12">
@@ -27,4 +30,4 @@
            visibility="{{ isEmpty ? 'visible' : 'collapse' }}"
            margin="12" />
   </StackLayout>
-</Page>
+  </Page>

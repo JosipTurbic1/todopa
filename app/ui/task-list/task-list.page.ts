@@ -1,4 +1,4 @@
-import { EventData, Page } from '@nativescript/core';
+import { EventData, Page, Frame } from '@nativescript/core';
 import { TaskListViewModel } from './task-list.vm';
 
 let vm: TaskListViewModel;
@@ -29,3 +29,8 @@ export async function onItemTap(args: any) {
     const index = args.index as number;
     await vm.selectByIndex(index);
 }
+
+export function goToCreate() {
+    Frame.topmost().navigate('ui/task-create/task-create.page');
+}
+
