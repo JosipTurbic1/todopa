@@ -1,1 +1,1 @@
-<Frame defaultPage="ui/home/home-page" />
+<Frame defaultPage = "ui/task-list/task-list.page" />

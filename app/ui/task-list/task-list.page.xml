@@ -1,0 +1,30 @@
+<Page navigatingTo="onNavigatingTo">
+  <ActionBar title="Aufgaben" />
+  <StackLayout>
+
+    <StackLayout orientation="horizontal" margin="12">
+      <Button text="To Do" tap="filterToDo" />
+      <Button text="In Progress" tap="filterInProgress" />
+      <Button text="Done" tap="filterDone" />
+      <Button text="Alle" tap="filterAll" />
+    </StackLayout>
+
+    <ListView items="{{ tasks }}" itemTap="onItemTap">
+      <ListView.itemTemplate>
+        <GridLayout columns="*, auto" padding="12">
+          <StackLayout col="0">
+            <Label text="{{ title }}" class="h2" />
+            <Label text="{{ statusLabel }}" />
+            <Label text="{{ metaLabel }}" />
+          </StackLayout>
+
+          <Label col="1" text="›" verticalAlignment="center" />
+        </GridLayout>
+      </ListView.itemTemplate>
+    </ListView>
+
+    <Label text="{{ emptyLabel }}"
+           visibility="{{ isEmpty ? 'visible' : 'collapse' }}"
+           margin="12" />
+  </StackLayout>
+</Page>
