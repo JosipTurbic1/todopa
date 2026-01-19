@@ -40,6 +40,12 @@ export class TaskListViewModel extends Observable {
         console.log(`Selected task id: ${item.id}`);
     }
 
+    getIdByIndex(index: number): string | null {
+        const item = this.tasks[index];
+        return item?.id ?? null;
+    }
+
+
     private applyFilter(): void {
         let filtered: Task[];
 

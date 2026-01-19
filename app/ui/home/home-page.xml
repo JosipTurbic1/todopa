@@ -1,7 +1,0 @@
-<Page navigatingTo="onNavigatingTo">
-  <ActionBar title="Task Manager" />
-  <StackLayout>
-    <Label text="Home Page" class="h1" />
-    <Button text="Go to Dummy Page" tap="goToDummy" />
-  </StackLayout>
-</Page>

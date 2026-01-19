@@ -25,10 +25,17 @@ export async function filterAll() {
     await vm.setFilter('ALL');
 }
 
-export async function onItemTap(args: any) {
+export function onItemTap(args: any) {
     const index = args.index as number;
-    await vm.selectByIndex(index);
+    const id = vm.getIdByIndex(index);
+    if (!id) return;
+
+    Frame.topmost().navigate({
+        moduleName: 'ui/task-detail/task-detail.page',
+        context: { id },
+    });
 }
+
 
 export function goToCreate() {
     Frame.topmost().navigate('ui/task-create/task-create.page');

@@ -1,0 +1,27 @@
+<Page navigatingTo="onNavigatingTo">
+  <ActionBar title="Aufgabe">
+     <ActionItem text="Bearbeiten" tap="goToEdit" ios.position="right" android.position="actionBar" />
+  </ActionBar>
+
+  <ScrollView>
+    <StackLayout padding="12" spacing="12">
+
+      <Label text="{{ title }}" class="h1" />
+
+      <StackLayout>
+        <Label text="{{ statusLabel }}" />
+        <Label text="{{ priorityLabel }}" />
+        <Label text="{{ deadlineLabel }}" />
+      </StackLayout>
+
+      <StackLayout>
+        <Label text="Beschreibung" class="h2" />
+        <Label text="{{ descriptionLabel }}" textWrap="true" />
+      </StackLayout>
+
+      <Label text="{{ infoLabel }}"
+             visibility="{{ hasInfo ? 'visible' : 'collapse' }}" />
+
+    </StackLayout>
+  </ScrollView>
+</Page>

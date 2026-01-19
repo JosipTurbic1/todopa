@@ -1,0 +1,41 @@
+<Page navigatingTo="onNavigatingTo">
+  <ActionBar title="Aufgabe bearbeiten">
+    <ActionItem text="Speichern" tap="save" ios.position="right" android.position="actionBar" />
+  </ActionBar>
+
+  <ScrollView>
+    <StackLayout padding="12" spacing="12">
+
+      <Label text="Titel *" />
+      <TextField text="{{ title }}" />
+
+      <Label text="Beschreibung" />
+      <TextView text="{{ description }}" height="100" />
+
+      <Label text="Status" />
+      <StackLayout orientation="horizontal">
+        <Button text="To Do" tap="setToDo" />
+        <Button text="In Progress" tap="setInProgress" />
+        <Button text="Done" tap="setDone" />
+      </StackLayout>
+      <Label text="{{ statusLabel }}" />
+
+      <Label text="Priorität" />
+      <StackLayout orientation="horizontal">
+        <Button text="Low" tap="setLow" />
+        <Button text="Medium" tap="setMedium" />
+        <Button text="High" tap="setHigh" />
+      </StackLayout>
+      <Label text="{{ priorityLabel }}" />
+
+      <Label text="Deadline" />
+      <DatePicker date="{{ deadlineDate }}" dateChange="onDateChange" />
+      <Label text="{{ deadlineLabel }}" />
+
+      <Label text="{{ errorMessage }}"
+             visibility="{{ hasError ? 'visible' : 'collapse' }}"
+             marginTop="8" />
+
+    </StackLayout>
+  </ScrollView>
+</Page>
