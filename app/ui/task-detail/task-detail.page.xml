@@ -1,6 +1,7 @@
 <Page navigatingTo="onNavigatingTo">
   <ActionBar title="Aufgabe">
      <ActionItem text="Bearbeiten" tap="goToEdit" ios.position="right" android.position="actionBar" />
+     <ActionItem text="Löschen" tap="deleteTask" ios.position="right" android.position="actionBar" />
   </ActionBar>
 
   <ScrollView>
@@ -13,6 +14,15 @@
         <Label text="{{ priorityLabel }}" />
         <Label text="{{ deadlineLabel }}" />
       </StackLayout>
+
+      <Label text="Status ändern" class="h2" />
+
+      <StackLayout orientation="horizontal">
+        <Button text="To Do" tap="setToDo" />
+        <Button text="In Progress" tap="setInProgress" />
+        <Button text="Done" tap="setDone" />
+      </StackLayout>
+
 
       <StackLayout>
         <Label text="Beschreibung" class="h2" />

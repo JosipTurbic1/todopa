@@ -1,5 +1,7 @@
-import { EventData, NavigatedData, Page, Frame } from '@nativescript/core';
+import { EventData, NavigatedData, Page, Frame, confirm } from '@nativescript/core';
 import { TaskDetailViewModel } from './task-detail.vm';
+import { AppContainer } from '~/app.container';
+import { TaskStatus } from '~/domain/task-status.enum'
 
 let vm: TaskDetailViewModel;
 let taskId: string | null = null;
@@ -32,3 +34,39 @@ export function goToEdit() {
         context: { id: taskId },
     });
 }
+
+export async function deleteTask() {
+    if (!taskId) return;
+
+    const ok = await confirm({
+        title: 'Löschen bestätigen',
+        message: 'Möchtest du diese Aufgabe wirklich löschen?',
+        okButtonText: 'Löschen',
+        cancelButtonText: 'Abbrechen',
+    });
+
+    if (!ok) return;
+
+    await AppContainer.taskService.delete(taskId);
+    Frame.topmost().goBack();
+}
+
+export async function setToDo() {
+    await setStatus(TaskStatus.ToDo);
+}
+
+export async function setInProgress() {
+    await setStatus(TaskStatus.InProgress);
+}
+
+export async function setDone() {
+    await setStatus(TaskStatus.Done);
+}
+
+async function setStatus(status: TaskStatus) {
+    if (!taskId) return;
+
+    await AppContainer.taskService.setStatus(taskId, status);
+    await vm.load(taskId);
+}
+
