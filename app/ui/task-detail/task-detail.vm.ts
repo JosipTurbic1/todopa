@@ -15,6 +15,9 @@ export class TaskDetailViewModel extends Observable {
 
     hasInfo = false;
     infoLabel = '';
+    isOverdue = false;
+    overdueLabel = 'ÜBERFÄLLIG';
+
 
     async load(id: string): Promise<void> {
         this.task = await AppContainer.taskService.getById(id);
@@ -30,6 +33,8 @@ export class TaskDetailViewModel extends Observable {
         this.deadlineLabel = this.task.deadline
             ? `Deadline: ${this.task.deadline.slice(0, 10)}`
             : 'Deadline: Keine';
+        this.isOverdue = this.computeOverdue(this.task);
+        this.overdueLabel = this.isOverdue ? 'ÜBERFÄLLIG' : '';
 
         this.descriptionLabel = this.task.description?.trim() || '(Keine Beschreibung)';
 
@@ -51,6 +56,9 @@ export class TaskDetailViewModel extends Observable {
         this.notifyPropertyChange('descriptionLabel', this.descriptionLabel);
         this.notifyPropertyChange('hasInfo', this.hasInfo);
         this.notifyPropertyChange('infoLabel', this.infoLabel);
+        this.notifyPropertyChange('isOverdue', this.isOverdue);
+        this.notifyPropertyChange('overdueLabel', this.overdueLabel);
+
     }
 
     private statusToLabel(status: TaskStatus): string {
@@ -74,4 +82,12 @@ export class TaskDetailViewModel extends Observable {
                 return 'High';
         }
     }
+
+    private computeOverdue(task: Task): boolean {
+        if (!task.deadline) return false;
+        if (task.status === TaskStatus.Done) return false;
+
+        return new Date(task.deadline).getTime() < Date.now();
+    }
+
 }

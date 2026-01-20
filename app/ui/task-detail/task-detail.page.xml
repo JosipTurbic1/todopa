@@ -13,6 +13,7 @@
         <Label text="{{ statusLabel }}" />
         <Label text="{{ priorityLabel }}" />
         <Label text="{{ deadlineLabel }}" />
+        <Label text="{{ overdueLabel }}" visibility="{{ isOverdue ? 'visible' : 'collapse' }}" />
       </StackLayout>
 
       <Label text="Status ändern" class="h2" />
@@ -29,8 +30,7 @@
         <Label text="{{ descriptionLabel }}" textWrap="true" />
       </StackLayout>
 
-      <Label text="{{ infoLabel }}"
-             visibility="{{ hasInfo ? 'visible' : 'collapse' }}" />
+      <Label text="{{ infoLabel }}" visibility="{{ hasInfo ? 'visible' : 'collapse' }}" />
 
     </StackLayout>
   </ScrollView>

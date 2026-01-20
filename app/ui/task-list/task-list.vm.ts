@@ -47,23 +47,19 @@ export class TaskListViewModel extends Observable {
 
 
     private applyFilter(): void {
-        let filtered: Task[];
+        const filtered: Task[] =
+            this.filter === 'ALL'
+                ? [...this.allTasks]
+                : this.allTasks.filter(t => t.status === this.mapFilterToStatus(this.filter as Exclude<Filter, 'ALL'>));
 
-        if (this.filter === 'ALL') {
-            filtered = this.allTasks;
-        } else {
-            const status =
-                this.filter === 'TO_DO'
-                    ? TaskStatus.ToDo
-                    : this.filter === 'IN_PROGRESS'
-                        ? TaskStatus.InProgress
-                        : TaskStatus.Done;
+        const sorted = [...filtered].sort((a, b) => {
+            const pDiff = this.priorityWeight(a.priority) - this.priorityWeight(b.priority);
+            if (pDiff !== 0) return pDiff;
 
-            filtered = this.allTasks.filter(t => t.status === status);
-        }
+            return this.deadlineTimestamp(a) - this.deadlineTimestamp(b);
+        });
 
-
-        this.tasks = filtered.map(t => ({
+        this.tasks = sorted.map(t => ({
             id: t.id,
             title: t.title,
             statusLabel: this.statusToLabel(t.status),
@@ -76,6 +72,7 @@ export class TaskListViewModel extends Observable {
         this.notifyPropertyChange('isEmpty', this.isEmpty);
         this.notifyPropertyChange('emptyLabel', this.emptyLabel);
     }
+
 
     private mapFilterToStatus(filter: 'TO_DO' | 'IN_PROGRESS' | 'DONE'): TaskStatus {
         switch (filter) {
@@ -102,7 +99,9 @@ export class TaskListViewModel extends Observable {
     private buildMetaLabel(task: Task): string {
         const prio = this.priorityToLabel(task.priority);
         const deadline = task.deadline ? `Deadline: ${this.formatDate(task.deadline)}` : 'Keine Deadline';
-        return `${prio} • ${deadline}`;
+        const overdue = this.isOverdue(task) ? ' • ÜBERFÄLLIG' : '';
+        return `${prio} • ${deadline}${overdue}`;
+
     }
 
     private priorityToLabel(priority: TaskPriority): string {
@@ -115,10 +114,37 @@ export class TaskListViewModel extends Observable {
                 return 'Priorität: High';
         }
     }
+    private priorityWeight(priority: TaskPriority): number {
+        switch (priority) {
+            case TaskPriority.High:
+                return 1;
+            case TaskPriority.Medium:
+                return 2;
+            case TaskPriority.Low:
+                return 3;
+        }
+    }
+
+    private deadlineTimestamp(task: Task): number {
+        if (!task.deadline) return Number.MAX_SAFE_INTEGER;
+        return new Date(task.deadline).getTime();
+    }
+
+
 
     private formatDate(iso: string): string {
         return iso.slice(0, 10);
     }
+
+    private isOverdue(task: Task): boolean {
+        if (!task.deadline) return false;
+        if (task.status === TaskStatus.Done) return false;
+
+        const deadlineTime = new Date(task.deadline).getTime();
+        const now = Date.now();
+        return deadlineTime < now;
+    }
+
 
     private async ensureDemoDataOnce(): Promise<void> {
         const before = await AppContainer.taskService.getAll();
