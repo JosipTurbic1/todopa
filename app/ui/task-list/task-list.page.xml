@@ -1,4 +1,4 @@
-<Page navigatingTo="onNavigatingTo">
+<Page navigatedTo="onNavigatedTo">
   <ActionBar title="Aufgaben">
     <ActionItem text="+" tap="goToCreate" ios.position="right" android.position="actionBar" />
   </ActionBar>

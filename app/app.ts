@@ -1,9 +1,14 @@
 import { Application } from '@nativescript/core'
 import './app.container'; // ensures services are initialized
+import { runMigrations } from '~/data/db/migrations';
 
-Application.run({ moduleName: 'app-root' })
+async function start() {
+    await runMigrations();
+    Application.run({ moduleName: 'app-root' });
+}
 
-/*
-Do not place any code after the application has been started as it will not
-be executed on iOS.
-*/
+start().catch(err => {
+    console.error('App start failed:', err);
+});
+
+

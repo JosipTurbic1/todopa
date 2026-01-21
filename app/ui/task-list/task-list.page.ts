@@ -3,14 +3,17 @@ import { TaskListViewModel } from './task-list.vm';
 
 let vm: TaskListViewModel;
 
-export async function onNavigatingTo(args: EventData) {
+export async function onNavigatedTo(args: EventData) {
     const page = args.object as Page;
 
-    vm = new TaskListViewModel();
-    page.bindingContext = vm;
+    if (!vm) {
+        vm = new TaskListViewModel();
+        page.bindingContext = vm;
+    }
 
     await vm.load();
 }
+
 
 export async function filterToDo() {
     await vm.setFilter('TO_DO');

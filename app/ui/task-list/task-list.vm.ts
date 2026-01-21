@@ -22,8 +22,6 @@ export class TaskListViewModel extends Observable {
     emptyLabel = 'Keine Aufgaben vorhanden.';
 
     async load(): Promise<void> {
-        await this.ensureDemoDataOnce();
-
         this.allTasks = await AppContainer.taskService.getAll();
         this.applyFilter();
     }
@@ -143,30 +141,6 @@ export class TaskListViewModel extends Observable {
         const deadlineTime = new Date(task.deadline).getTime();
         const now = Date.now();
         return deadlineTime < now;
-    }
-
-
-    private async ensureDemoDataOnce(): Promise<void> {
-        const before = await AppContainer.taskService.getAll();
-        if (before.length > 0) return;
-
-        const t1 = await AppContainer.taskService.create({
-            title: 'Beispiel: Transferarbeit planen',
-            priority: TaskPriority.High,
-            deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-        });
-
-        await AppContainer.taskService.create({
-            title: 'Beispiel: App-Architektur dokumentieren',
-            priority: TaskPriority.Medium,
-        });
-
-        await AppContainer.taskService.create({
-            title: 'Beispiel: Unit Tests vorbereiten',
-            priority: TaskPriority.Low,
-        });
-
-        await AppContainer.taskService.setStatus(t1.id, TaskStatus.InProgress);
     }
 
 }
