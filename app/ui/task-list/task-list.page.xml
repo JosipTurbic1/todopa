@@ -3,16 +3,18 @@
     <ActionItem text="+" tap="goToCreate" ios.position="right" android.position="actionBar" />
   </ActionBar>
 
-  <StackLayout>
+  <GridLayout rows="auto, auto, *, auto">
 
-    <StackLayout orientation="horizontal" margin="12">
+    <StackLayout row="0" orientation="horizontal" margin="12">
       <Button text="To Do" tap="filterToDo" />
       <Button text="In Progress" tap="filterInProgress" />
       <Button text="Done" tap="filterDone" />
       <Button text="Alle" tap="filterAll" />
     </StackLayout>
 
-    <ListView items="{{ tasks }}" itemTap="onItemTap">
+    <Label row="1" text="{{ syncStatusLabel }}" margin="12" visibility="{{ isEmpty ? 'collapse' : 'visible' }}" />
+
+    <ListView row="2" items="{{ tasks }}" itemTap="onItemTap" visibility="{{ isEmpty ? 'collapse' : 'visible' }}">
       <ListView.itemTemplate>
         <GridLayout columns="*, auto" padding="12">
           <StackLayout col="0">
@@ -26,8 +28,13 @@
       </ListView.itemTemplate>
     </ListView>
 
-    <Label text="{{ emptyLabel }}"
+      <Label row="2"
+           text="{{ emptyLabel }}"
            visibility="{{ isEmpty ? 'visible' : 'collapse' }}"
+           horizontalAlignment="center"
+           verticalAlignment="center"
+           textWrap="true"
            margin="12" />
-  </StackLayout>
+
+    </GridLayout>
   </Page>

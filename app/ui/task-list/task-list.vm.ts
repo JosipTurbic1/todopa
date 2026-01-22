@@ -4,7 +4,9 @@ import { Task } from '~/domain/task.model';
 import { TaskStatus } from '~/domain/task-status.enum';
 import { TaskPriority } from '~/domain/task-priority.enum';
 
+
 type Filter = 'ALL' | 'TO_DO' | 'IN_PROGRESS' | 'DONE';
+
 
 type TaskListItem = {
     id: string;
@@ -20,10 +22,12 @@ export class TaskListViewModel extends Observable {
     tasks: TaskListItem[] = [];
     isEmpty = true;
     emptyLabel = 'Keine Aufgaben vorhanden.';
+    syncStatusLabel = '';
 
     async load(): Promise<void> {
         this.allTasks = await AppContainer.taskService.getAll();
         this.applyFilter();
+        this.updateSyncStatusLabel();
     }
 
     async setFilter(filter: Filter): Promise<void> {
@@ -131,8 +135,32 @@ export class TaskListViewModel extends Observable {
 
 
     private formatDate(iso: string): string {
-        return iso.slice(0, 10);
+        const [y, m, dayStr] = iso.slice(0, 10).split('-').map(Number);
+        const d = new Date(y, m - 1, dayStr);
+
+        const months = [
+            'Januar',
+            'Februar',
+            'März',
+            'April',
+            'Mai',
+            'Juni',
+            'Juli',
+            'August',
+            'September',
+            'Oktober',
+            'November',
+            'Dezember',
+        ];
+
+        const day = String(d.getDate()).padStart(2, '0');
+        const monthName = months[d.getMonth()];
+        const year = d.getFullYear();
+
+        return `${day}. ${monthName} ${year}`;
     }
+
+
 
     private isOverdue(task: Task): boolean {
         if (!task.deadline) return false;
@@ -142,5 +170,12 @@ export class TaskListViewModel extends Observable {
         const now = Date.now();
         return deadlineTime < now;
     }
+
+    private updateSyncStatusLabel(): void {
+        const online = AppContainer.connectivityService.isOnline();
+        this.syncStatusLabel = online ? 'Online – Synchronisation bereit' : 'Offline – Änderungen werden lokal gespeichert';
+        this.notifyPropertyChange('syncStatusLabel', this.syncStatusLabel);
+    }
+
 
 }

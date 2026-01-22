@@ -3,6 +3,13 @@ import { TaskCreateViewModel } from './task-create.vm';
 
 let vm: TaskCreateViewModel;
 
+function todayMinDate(): Date {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
+
 export function onNavigatingTo(args: EventData) {
     const page = args.object as Page;
     vm = new TaskCreateViewModel();
@@ -20,10 +27,25 @@ export async function save() {
 }
 
 export function onDateChange(args: any) {
-    const picker = args.object as DatePicker;
-    vm.deadlineDate = picker.date;
+    const picker = args.object as any;
+    const min = todayMinDate();
+
+    const chosen = new Date(picker.date);
+    chosen.setHours(0, 0, 0, 0);
+
+    if (chosen.getTime() < min.getTime()) {
+        picker.date = min;
+        vm.deadlineDate = min;
+    } else {
+        vm.deadlineDate = picker.date;
+    }
+
     vm.updateDeadlineLabel();
+
+    const page = picker.page;
+    page?.dismissSoftInput?.();
 }
+
 
 
 

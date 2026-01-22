@@ -2,6 +2,8 @@ import { Task } from '~/domain/task.model';
 import { TaskPriority } from '~/domain/task-priority.enum';
 import { TaskStatus } from '~/domain/task-status.enum';
 import { TaskRepository } from '~/data/repositories/task.repository';
+import { AppContainer } from '~/app.container';
+
 
 export class TaskService {
     constructor(private readonly repo: TaskRepository) { }
@@ -36,6 +38,14 @@ export class TaskService {
         };
 
         await this.repo.create(task);
+
+        await AppContainer.syncQueueRepository.enqueue({
+            entityType: 'task',
+            entityId: task.id,
+            operation: 'create',
+            payload: task,
+        });
+
         return task;
     }
 
@@ -51,11 +61,26 @@ export class TaskService {
         };
 
         await this.repo.update(updated);
+
+        await AppContainer.syncQueueRepository.enqueue({
+            entityType: 'task',
+            entityId: updated.id,
+            operation: 'update',
+            payload: updated,
+        });
+
     }
 
     async delete(id: string): Promise<void> {
         this.ensureNonEmpty(id, 'id');
         await this.repo.delete(id);
+
+        await AppContainer.syncQueueRepository.enqueue({
+            entityType: 'task',
+            entityId: id,
+            operation: 'delete',
+        });
+
     }
 
     async setStatus(id: string, status: TaskStatus): Promise<void> {
@@ -68,6 +93,14 @@ export class TaskService {
             status,
             updatedAt: new Date().toISOString(),
         });
+
+        await AppContainer.syncQueueRepository.enqueue({
+            entityType: 'task',
+            entityId: id,
+            operation: 'update',
+            payload: { id, status },
+        });
+
     }
 
     // -------------------------

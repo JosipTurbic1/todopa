@@ -3,6 +3,13 @@ import { TaskEditViewModel } from './task-edit.vm';
 
 let vm: TaskEditViewModel;
 
+function todayMinDate(): Date {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
+
 export async function onNavigatingTo(args: any) {
     const page = args.object as Page;
     const id = (args as any).context?.id as string | undefined;
@@ -29,10 +36,25 @@ export async function save() {
 }
 
 export function onDateChange(args: any) {
-    const picker = args.object as DatePicker;
-    vm.deadlineDate = picker.date;
+    const picker = args.object as any;
+    const min = todayMinDate();
+
+    const chosen = new Date(picker.date);
+    chosen.setHours(0, 0, 0, 0);
+
+    if (chosen.getTime() < min.getTime()) {
+        picker.date = min;
+        vm.deadlineDate = min;
+    } else {
+        vm.deadlineDate = picker.date;
+    }
+
     vm.updateDeadlineLabel();
+
+    const page = picker.page;
+    page?.dismissSoftInput?.();
 }
+
 
 export function setToDo() {
     vm.setStatus('TO_DO');
