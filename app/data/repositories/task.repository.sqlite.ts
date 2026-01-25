@@ -4,54 +4,32 @@ import { TaskStatus } from '~/domain/task-status.enum';
 import { getDb } from '~/data/db/sqlite.client';
 
 export class SqliteTaskRepository implements TaskRepository {
+
+    private readonly baseSelect = `
+        SELECT
+            id, title, description, status, deadline, priority,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM tasks
+       `;
+
     async getAll(): Promise<Task[]> {
         const db = await getDb();
 
-        const rows = await db.all(
-            `SELECT
-                id,
-                title,
-                description,
-                status,
-                deadline,
-                priority,
-                created_at AS createdAt,
-                updated_at AS updatedAt
-            FROM tasks
-            ORDER BY updated_at DESC`
-        );
+        const rows = await db.all(`${this.baseSelect} ORDER BY updated_at DESC`);
 
-        console.log('[SQLITE] getAll rows', rows.length);
-
-        return rows.map(this.mapRowToTask);
-
+        return rows.map(r => this.mapRowToTask(r));
     }
 
     async getById(id: string): Promise<Task | null> {
         const db = await getDb();
 
-        const row = await db.get(
-            `SELECT
-                id,
-                title,
-                description,
-                status,
-                deadline,
-                priority,
-                created_at AS createdAt,
-                updated_at AS updatedAt
-            FROM tasks
-            WHERE id = ?`,
-            [id]
-        );
-
-
+        const row = await db.get(`${this.baseSelect} WHERE id = ?`, [id]);
 
         return row ? this.mapRowToTask(row) : null;
     }
 
     async create(task: Task): Promise<void> {
-        console.log('[SQLITE] create task', task.id);
 
         const db = await getDb();
 
@@ -117,24 +95,10 @@ export class SqliteTaskRepository implements TaskRepository {
     async getByStatus(status: TaskStatus): Promise<Task[]> {
         const db = await getDb();
 
-        const rows = await db.all(
-            `SELECT
-                id,
-                title,
-                description,
-                status,
-                deadline,
-                priority,
-                created_at AS createdAt,
-                updated_at AS updatedAt
-            FROM tasks
-            WHERE status = ?
-            ORDER BY updated_at DESC`,
-            [status]
-        );
+        const rows = await db.all(`${this.baseSelect} WHERE status = ? ORDER BY updated_at DESC`, [status]);
 
 
-        return rows.map(this.mapRowToTask);
+        return rows.map(r => this.mapRowToTask(r));
     }
 
     private mapRowToTask(row: any): Task {

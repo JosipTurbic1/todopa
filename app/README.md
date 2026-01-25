@@ -48,7 +48,7 @@ Eine detaillierte Beschreibung der Architektur befindet sich in der Datei
 
 ## Testing
 Die Teststrategie sowie Testfälle sind dokumentiert in  
-[`docs/Testplan.md`](docs/Testplan.md).
+[`docs/Test.md`](docs/Test.md).
 
 ---
 

@@ -3,6 +3,7 @@ import { AppContainer } from '~/app.container';
 import { Task } from '~/domain/task.model';
 import { TaskPriority } from '~/domain/task-priority.enum';
 import { TaskStatus } from '~/domain/task-status.enum';
+import { formatDateGerman } from '~/utils/date-format.util';
 
 type PriorityKey = 'LOW' | 'MEDIUM' | 'HIGH';
 type StatusKey = 'TO_DO' | 'IN_PROGRESS' | 'DONE';
@@ -94,8 +95,9 @@ export class TaskEditViewModel extends Observable {
     }
 
     updateDeadlineLabel(): void {
-        const yyyyMmDd = this.deadlineDate.toISOString().slice(0, 10);
-        this.deadlineLabel = `Deadline: ${yyyyMmDd}`;
+        this.deadlineLabel = this.deadlineDate
+            ? `Deadline: ${formatDateGerman(this.deadlineDate.toISOString())}`
+            : 'Deadline: Keine';
         this.notifyPropertyChange('deadlineLabel', this.deadlineLabel);
     }
 

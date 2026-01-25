@@ -9,9 +9,16 @@
     "@nativescript/theme": "^3.1.0"
   },
   "devDependencies": {
+    "@nativescript/android": "^9.0.2",
     "@nativescript/ios": "9.0.3",
     "@nativescript/types": "~9.0.0",
     "@nativescript/webpack": "~5.0.25",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "typescript": "~5.4.0"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }

@@ -9,6 +9,6 @@ export interface TaskRepository {
     update(task: Task): Promise<void>;
     delete(id: string): Promise<void>;
 
-    // optional helper
-    getByStatus?(status: TaskStatus): Promise<Task[]>;
+
+    getByStatus(status: TaskStatus): Promise<Task[]>;
 }

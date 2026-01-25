@@ -3,6 +3,7 @@ import { AppContainer } from '~/app.container';
 import { Task } from '~/domain/task.model';
 import { TaskStatus } from '~/domain/task-status.enum';
 import { TaskPriority } from '~/domain/task-priority.enum';
+import { formatDateGerman } from '~/utils/date-format.util';
 
 export class TaskDetailViewModel extends Observable {
     private task: Task | null = null;
@@ -31,7 +32,7 @@ export class TaskDetailViewModel extends Observable {
         this.statusLabel = `Status: ${this.statusToLabel(this.task.status)}`;
         this.priorityLabel = `Priorität: ${this.priorityToLabel(this.task.priority)}`;
         this.deadlineLabel = this.task.deadline
-            ? `Deadline: ${this.task.deadline.slice(0, 10)}`
+            ? `Deadline: ${formatDateGerman(this.task.deadline)}`
             : 'Deadline: Keine';
         this.isOverdue = this.computeOverdue(this.task);
         this.overdueLabel = this.isOverdue ? 'ÜBERFÄLLIG' : '';

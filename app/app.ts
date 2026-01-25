@@ -1,11 +1,13 @@
-import { Application } from '@nativescript/core'
-import './app.container'; // ensures services are initialized
+import { Application } from '@nativescript/core';
 import { runMigrations } from '~/data/db/migrations';
 import { AppContainer } from './app.container';
 
 
 async function start() {
+    console.log('[APP] running migrations...');
     await runMigrations();
+    console.log('[APP] migrations done.');
+
     if (AppContainer.connectivityService.isOnline()) {
         AppContainer.syncService.processQueue().catch(err => console.error('[SYNC] failed:', err));
     } else {

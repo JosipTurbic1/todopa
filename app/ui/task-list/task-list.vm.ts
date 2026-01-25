@@ -3,6 +3,7 @@ import { AppContainer } from '~/app.container';
 import { Task } from '~/domain/task.model';
 import { TaskStatus } from '~/domain/task-status.enum';
 import { TaskPriority } from '~/domain/task-priority.enum';
+import { formatDateGerman } from '~/utils/date-format.util';
 
 
 type Filter = 'ALL' | 'TO_DO' | 'IN_PROGRESS' | 'DONE';
@@ -35,18 +36,10 @@ export class TaskListViewModel extends Observable {
         this.applyFilter();
     }
 
-    async selectByIndex(index: number): Promise<void> {
-        const item = this.tasks[index];
-        if (!item) return;
-
-        console.log(`Selected task id: ${item.id}`);
-    }
-
     getIdByIndex(index: number): string | null {
         const item = this.tasks[index];
         return item?.id ?? null;
     }
-
 
     private applyFilter(): void {
         const filtered: Task[] =
@@ -75,7 +68,6 @@ export class TaskListViewModel extends Observable {
         this.notifyPropertyChange('emptyLabel', this.emptyLabel);
     }
 
-
     private mapFilterToStatus(filter: 'TO_DO' | 'IN_PROGRESS' | 'DONE'): TaskStatus {
         switch (filter) {
             case 'TO_DO':
@@ -100,7 +92,7 @@ export class TaskListViewModel extends Observable {
 
     private buildMetaLabel(task: Task): string {
         const prio = this.priorityToLabel(task.priority);
-        const deadline = task.deadline ? `Deadline: ${this.formatDate(task.deadline)}` : 'Keine Deadline';
+        const deadline = task.deadline ? `Deadline: ${formatDateGerman(task.deadline)}` : 'Keine Deadline';
         const overdue = this.isOverdue(task) ? ' • ÜBERFÄLLIG' : '';
         return `${prio} • ${deadline}${overdue}`;
 
@@ -132,36 +124,6 @@ export class TaskListViewModel extends Observable {
         return new Date(task.deadline).getTime();
     }
 
-
-
-    private formatDate(iso: string): string {
-        const [y, m, dayStr] = iso.slice(0, 10).split('-').map(Number);
-        const d = new Date(y, m - 1, dayStr);
-
-        const months = [
-            'Januar',
-            'Februar',
-            'März',
-            'April',
-            'Mai',
-            'Juni',
-            'Juli',
-            'August',
-            'September',
-            'Oktober',
-            'November',
-            'Dezember',
-        ];
-
-        const day = String(d.getDate()).padStart(2, '0');
-        const monthName = months[d.getMonth()];
-        const year = d.getFullYear();
-
-        return `${day}. ${monthName} ${year}`;
-    }
-
-
-
     private isOverdue(task: Task): boolean {
         if (!task.deadline) return false;
         if (task.status === TaskStatus.Done) return false;
@@ -176,6 +138,5 @@ export class TaskListViewModel extends Observable {
         this.syncStatusLabel = online ? 'Online – Synchronisation bereit' : 'Offline – Änderungen werden lokal gespeichert';
         this.notifyPropertyChange('syncStatusLabel', this.syncStatusLabel);
     }
-
 
 }

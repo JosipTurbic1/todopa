@@ -14,7 +14,6 @@ export async function onNavigatedTo(args: EventData) {
     await vm.load();
 }
 
-
 export async function filterToDo() {
     await vm.setFilter('TO_DO');
 }
