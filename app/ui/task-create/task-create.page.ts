@@ -1,4 +1,4 @@
-import { EventData, Page, Frame, alert, DatePicker } from '@nativescript/core';
+import { EventData, Page, Frame, alert } from '@nativescript/core';
 import { TaskCreateViewModel } from './task-create.vm';
 
 let vm: TaskCreateViewModel;

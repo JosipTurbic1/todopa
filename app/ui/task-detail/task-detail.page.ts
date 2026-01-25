@@ -1,4 +1,4 @@
-import { EventData, NavigatedData, Page, Frame, confirm } from '@nativescript/core';
+import { NavigatedData, Page, Frame, confirm } from '@nativescript/core';
 import { TaskDetailViewModel } from './task-detail.vm';
 import { AppContainer } from '~/app.container';
 import { TaskStatus } from '~/domain/task-status.enum'

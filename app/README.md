@@ -36,7 +36,7 @@ Die Anwendung ist in klar getrennte Schichten unterteilt:
 - `app/services` – Geschäftslogik
 - `app/ui` – UI-Seiten und ViewModels
 - `docs` – Architektur- und Testdokumentation
-- `tests` – Unit- und Integrationstests
+- `app/__tests__` – Unit- und Integrationstests
 
 ---
 

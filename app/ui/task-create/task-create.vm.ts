@@ -1,6 +1,7 @@
 import { Observable } from '@nativescript/core';
 import { AppContainer } from '~/app.container';
 import { TaskPriority } from '~/domain/task-priority.enum';
+import { formatDateGerman } from '~/utils/date-format.util';
 
 type PriorityKey = 'LOW' | 'MEDIUM' | 'HIGH';
 
@@ -69,8 +70,7 @@ export class TaskCreateViewModel extends Observable {
 
     public updateDeadlineLabel(): void {
         const d = this.deadlineDate;
-        const yyyyMmDd = d.toISOString().slice(0, 10);
-        this.deadlineLabel = `Deadline: ${yyyyMmDd}`;
+        this.deadlineLabel = `Deadline: ${formatDateGerman(this.deadlineDate.toISOString())}`;
         this.notifyPropertyChange('deadlineLabel', this.deadlineLabel);
     }
 
