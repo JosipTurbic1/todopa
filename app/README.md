@@ -56,4 +56,8 @@ Die Teststrategie sowie Testfälle sind dokumentiert in
 
 ### iOS
 ```bash
-ns run ios --hmr
+ns run ios
+
+### Android
+```bash
+ns run android
